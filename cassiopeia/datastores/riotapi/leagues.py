@@ -34,7 +34,7 @@ class LeaguesAPI(RiotAPIService):
         except APINotFoundError as error:
             raise NotFoundError(str(error)) from error
 
-        return PositionalQueuesDto(platform=query["platform"].value, queues=data)
+        return PositionalQueuesDto(region=query["platform"].region.value, queues=data)
 
     # League positions
 
@@ -111,6 +111,9 @@ class LeaguesAPI(RiotAPIService):
             data = self._get(url, app_limiter=app_limiter, method_limiter=method_limiter)
         except APINotFoundError:
             data = []
+        region = query["platform"].region.value
+        for position in data:
+            position["region"] = region
         return PositionalLeaguesListDto(entries=data, page=query["page"], region=query["region"].value, queue=query["queue"].value, tier=query["tier"].value, division=query["division"].value, position=query["position"].value)
 
     # Leagues
