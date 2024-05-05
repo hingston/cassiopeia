@@ -42,8 +42,6 @@ class SummonerAPI(RiotAPIService):
         .as_(str)
         .or_("puuid")
         .as_(str)
-        .or_("name")
-        .as_(str)
         .also.has("platform")
         .as_(Platform)
     )
@@ -63,17 +61,11 @@ class SummonerAPI(RiotAPIService):
                 platform=query["platform"].value.lower(), accountId=query["accountId"]
             )
             endpoint = "summoners/by-account/accountId"
-        elif "name" in query:
-            name = query["name"].replace(" ", "%20")
-            url = "https://{platform}.api.riotgames.com/lol/summoner/v4/summoners/by-name/{name}".format(
-                platform=query["platform"].value.lower(), name=name
-            )
-            endpoint = "summoners/by-name/name"
         elif "puuid" in query:
-            url = (
-                url
-            ) = "https://{platform}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}".format(
-                platform=query["platform"].value.lower(), puuid=query["puuid"]
+            url = url = (
+                "https://{platform}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}".format(
+                    platform=query["platform"].value.lower(), puuid=query["puuid"]
+                )
             )
             endpoint = "summoners/by-puuid/puuid"
         else:
